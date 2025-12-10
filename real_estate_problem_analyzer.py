@@ -2,14 +2,14 @@
 """
 Simple Real Estate Problem Analyzer using Google AI
 """
-
-import os
-import sys
 import csv
 import json
+import os
+import sys
+
 import google.generativeai as genai
-from PIL import Image
 from dotenv import load_dotenv
+from PIL import Image
 
 # Load environment variables
 load_dotenv()
@@ -80,7 +80,7 @@ def main():
         sys.exit(1)
 
     image_file = sys.argv[1]
-    api_key = os.getenv("GOOGLE_AI_API_KEY")
+    api_key = os.getenv("GOOGLE_API_KEY")
 
     if not api_key:
         print("Error: No API key provided. Set GOOGLE_AI_API_KEY or pass as argument.")

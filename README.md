@@ -2,6 +2,12 @@
 
 This system analyzes photos of house rooms, detects problems, and marks them with red circles at their pixel coordinates.
 
+## Running
+
+- Use `environment.yml` to create a conda environment with required packages.
+- Fill in your api keys. For reference, see `template.env`.
+- Run via `python -m streamlit run streamlit-image-uploader/app.py`
+
 ## Features
 
 - **AI-Powered Problem Detection**: Uses Google's Gemini AI to identify issues like cracks, water damage, mold, etc.
@@ -275,10 +281,6 @@ pip install google-generativeai
 3. Commit your changes (`git commit -m 'Add some amazing feature'`)
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
-
-## License 📄
-
-This project is open source. Please check the repository for license details.
 
 ## Acknowledgments 🙏
 

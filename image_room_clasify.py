@@ -1,8 +1,9 @@
 import os
 import sys
+
 import google.generativeai as genai
-from PIL import Image
 from dotenv import load_dotenv
+from PIL import Image
 
 
 def categorize_image(image_path, api_key):
@@ -82,7 +83,7 @@ if __name__ == "__main__":
 
     load_dotenv()
     image_path = sys.argv[1]
-    api_key = os.getenv("GOOGLE_AI_API_KEY")
+    api_key = os.getenv("GOOGLE_API_KEY")
 
     result = categorize_image(image_path, api_key)
     print(f"Category: {result}")

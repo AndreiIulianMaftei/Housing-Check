@@ -15,14 +15,19 @@ Requirements:
     $env:GOOGLE_CLOUD_API_KEY="your_api_key_here"
 """
 
-import io
-import cv2
-import sys
-import numpy as np
-import os
-import requests
-import json
 import base64
+import io
+import json
+import os
+import sys
+
+import cv2
+import numpy as np
+import requests
+from dotenv import load_dotenv
+
+# Load .env file
+load_dotenv()
 
 
 def detect_and_draw(image_path, target_objects, output_path="output.jpg", api_key=None):
@@ -168,7 +173,7 @@ def detect_and_draw_(image, target_objects, api_key=None):
 
 if __name__ == "__main__":
     # Set your Google Cloud Vision API key here
-    API_KEY = "AIzaSyCswgRACKCalr5yDTICVRnQbfxS7A6wrvY"  # Get from environment variable
+    API_KEY = os.getenv("GOOGLE_API_KEY")
     if not API_KEY:
         raise ValueError("Please set GOOGLE_CLOUD_API_KEY environment variable")
     image_path = "photos/images.jpg"

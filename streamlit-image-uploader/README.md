@@ -35,7 +35,3 @@ After running the command, open your web browser and go to `http://localhost:850
 
 1. Click on the "Browse files" button to upload an image from your device.
 2. The uploaded image will be displayed on the page.
-
-## License
-
-This project is open-source and available under the MIT License.

@@ -1,19 +1,22 @@
-import os
-import openai
-import streamlit as st
-from PIL import Image
-import random
 import json
-from geopy.geocoders import Nominatim
-import pandas as pd
+import os
+
 import altair as alt
+import openai
+import pandas as pd
+import streamlit as st
+from dotenv import load_dotenv
+from geopy.geocoders import Nominatim
+from PIL import Image
 
-
+from image_room_clasify import clasify_image
+from nano_edit import detect_and_draw_
+from price_analasys import RenovationAnalyzer
 from process_image import analyze_image_
 from real_estate_problem_analyzer import analyze_image_problems
-from image_room_clasify import clasify_image
-from price_analasys import RenovationAnalyzer
-from nano_edit import detect_and_draw_
+
+# Load .env file
+load_dotenv()
 
 
 def extract_cost_rows(analysis_json):
@@ -151,8 +154,9 @@ def load_prompt(prompt_file):
 def main():
 
     st.title("HouseEval AI")
-    api_key = os.getenv("GOOGLE_AI_API_KEY")
-    video_key = os.getenv("GOOGLE_AI_VIDEO_KEY")
+    api_key = os.getenv("GOOGLE_API_KEY")
+    video_key = os.getenv("GOOGLE_API_KEY")
+    apertus_api_key = os.getenv("APERTUS_SWISSCOM_API_KEY")
     analyzer = RenovationAnalyzer(api_key)
 
     prompt_file = "streamlit-image-uploader/prompt.txt"
@@ -213,9 +217,15 @@ def main():
                     # downsample image
                     image = image.resize((512, 512))
                     output_image_path = f"anomaly_{uploaded_file.name}"
-                    img = detect_and_draw_(
-                        image, target_objects=targets, api_key=video_key
-                    )
+                    try:
+                        img = detect_and_draw_(
+                            image, target_objects=targets, api_key=video_key
+                        )
+                    except Exception as e:
+                        st.error(
+                            f"Error processing anomalies {uploaded_file.name}: {e}"
+                        )
+                        continue
                     # Transform from cv2 to PIL
                     output_im = Image.fromarray(img)
                     # output_image = Image.open(output_image_path)
@@ -235,7 +245,11 @@ def main():
             image = image.resize((512, 512))
 
             # Clasify the image
-            clasify_image(image, api_key, counter)
+            try:
+                clasify_image(image, api_key, counter)
+            except Exception as e:
+                st.error(f"Error classifying image {uploaded_file.name}: {e}")
+                continue
             counter += 1
             analysis = analyze_image_(image, api_key, prompt=prompt)
             problems = analyze_image_problems(image, api_key)
@@ -330,7 +344,7 @@ def main():
 
             # Analyse property description with LLM
             client = openai.OpenAI(
-                api_key="XCnfIu5iKUABB6YWUaIGsrwi91yz",  # api_key=os.getenv("SWISS_AI_PLATFORM_API_KEY"),
+                api_key=apertus_api_key,
                 base_url="https://api.swisscom.com/layer/swiss-ai-weeks/apertus-70b/v1",
             )
 
@@ -346,7 +360,8 @@ def main():
                     Your answer should be a holistic but very short analysis but also concentrated on \
                     whether renovations might be needed. Note that the very first thing you need to tell \
                     me is the year the building was constructed, and summarize all renovations performed in \
-                    the property if the user has included these. STRUCTURE IT WITH BULLET POINTS. ANSWER ONLY IN ENGLISH, 200 WORDS ABSOLUTE MAX!",
+                    the property if the user has included these. \
+                    STRUCTURE IT WITH BULLET POINTS. ANSWER ONLY IN ENGLISH, 200 WORDS ABSOLUTE MAX!",
                     },
                     {"role": "user", "content": property_description},
                 ],

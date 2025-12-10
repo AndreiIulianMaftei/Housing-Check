@@ -10,8 +10,10 @@ local.properties
 pages/
 .env
 __pycache__/
+*.pyc
 *__pycache__
 Categorised_photos/
+*/.DS_Store
 
 # Android Studio generated files and folders
 captures/
@@ -22,6 +24,11 @@ captures/
 output-metadata.json
 renovation_analysis_results.json
 renovation_analysis_summary.md
+problems_*
+annotated_output.jpg
+renovation_analysis_results.json
+renovation_analysis_summary.md
+
 # IntelliJ
 *.iml
 .idea/
@@ -32,9 +39,6 @@ render.experimental.xml
 # Keystore files
 *.jks
 *.keystore
-
-# Google Services (e.g. APIs or Firebase)
-google-services.json
 
 # Android Profiling
 *.hprof
